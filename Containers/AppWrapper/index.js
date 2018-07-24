@@ -1,5 +1,6 @@
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 
 class AuthWrapper extends Component {
     constructor () {
