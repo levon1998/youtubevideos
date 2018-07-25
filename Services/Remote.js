@@ -41,22 +41,24 @@ function getErrorFromResponse (response, statusCode) {
 }
 
 export default function* request (options) {
-    const url = process.env.REACT_APP_BASE_URL + '/api/v1' + options.route;
+    const url = `https://www.googleapis.com${options.route}`;
     delete options.route;
 
     options.headers = options.headers || {};
     options.headers['Content-Type'] = 'application/json';
     options.credentials = 'include';
+
     let statusCode;
     const returnData = {
         success: false,
         data: {},
         error: {}
     };
+
     return yield fetch (url, options)
         .then(response => {
             statusCode = response.status;
-            if (statusCode === HTTP_OK || statusCode === HTTP_CREATED) {
+            if (statusCode === HTTP_OK) {
                 returnData.success = true;
             }
             if (statusCode >= 400){
@@ -74,6 +76,7 @@ export default function* request (options) {
                 })
         })
         .then(response => {
+            console.log(response);
             if (returnData.success) {
                 returnData.data = response;
             } else {
