@@ -6,14 +6,13 @@ import {getVideosSuccess, getVideosFailure} from './actions';
 function* getVideos (action) {
     try {
         const response = yield call(remote, {
-            route: '/account/logout',
-            method: 'post',
-            body: JSON.stringify(action.data)
+            route: action.data, //action.data is the url
+            method: 'GET',
         });
         if (response.success) {
-            yield put(getVideosSuccess());
+            yield put(getVideosSuccess(response.data));
         } else {
-            yield put(getVideosFailure());
+            yield put(getVideosFailure(response));
         }
     } catch (e) {
         console.error(e);
