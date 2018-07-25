@@ -1,4 +1,11 @@
-import {GET_VIDEOS_REQUEST, GET_VIDEOS_SUCCESS, GET_VIDEOS_FAILURE} from './constants';
+import {
+    GET_VIDEOS_REQUEST,
+    GET_VIDEOS_SUCCESS,
+    GET_VIDEOS_FAILURE,
+    SEARCH_REQUEST,
+    SEARCH_SUCCESS,
+    SEARCH_FAILURE
+} from './constants';
 
 const initialState = {
     videoList: [],
@@ -13,6 +20,12 @@ const authReducer = (state = initialState, action) => {
         case GET_VIDEOS_SUCCESS :
             return Object.assign({}, state, {loading: false, videoList: action.data, errorMessage: undefined});
         case GET_VIDEOS_FAILURE :
+            return Object.assign({}, state, {loading: false, videoList: [], errorMessage: action.data});
+        case SEARCH_REQUEST :
+            return Object.assign({}, state, {loading: true});
+        case SEARCH_SUCCESS :
+            return Object.assign({}, state, {loading: false, videoList: action.data, errorMessage: undefined});
+        case SEARCH_FAILURE :
             return Object.assign({}, state, {loading: false, videoList: [], errorMessage: action.data});
         default:
             return state;

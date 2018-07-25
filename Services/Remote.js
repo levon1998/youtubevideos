@@ -76,7 +76,6 @@ export default function* request (options) {
                 })
         })
         .then(response => {
-            console.log(response);
             if (returnData.success) {
                 returnData.data = response;
             } else {
