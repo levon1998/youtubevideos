@@ -5,7 +5,7 @@ Run command // Command must be create new folder with youtubevideos name
 1) git clone https://github.com/levon1998/youtubevideos.git
 
 Run command // Command must be create node_modules folder (all require packages)
-2)npm install
+2) npm install
 
 dependency
 expo, react-native
