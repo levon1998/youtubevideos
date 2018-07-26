@@ -3,20 +3,33 @@ import React, {Component} from 'react';
 import styles from '../../Styles/Styles';
 import {getVideos, search} from './actions';
 import {generateApiUrl} from '../../Services/GenerateApiUrl'
-import {FlatList, Image, Text, TextInput, View, ActivityIndicator} from 'react-native';
+import {
+    Modal,
+    FlatList,
+    Image,
+    Text,
+    TextInput,
+    View,
+    ActivityIndicator,
+    TouchableOpacity,
+    WebView
+} from 'react-native';
 
 class AuthWrapper extends Component {
     constructor () {
         super();
         this.state = {
             videos: [],
+            videoId: '',
             searchText: "",
+            modalVisible: false,
             youtubeParams: {
                 'part': 'snippet',
                 'regionCode': 'US',
                 'chart': 'mostPopular',
                 'key': 'AIzaSyD50zBPkbOMbp3dVVjAB_DmFVDQt0bGdQE',
-            }
+            },
+
         }
     }
 
@@ -37,6 +50,10 @@ class AuthWrapper extends Component {
         this.setState({searchText})
     }
 
+    openVideo (visible, videoId) {
+        this.setState({modalVisible: visible, videoId});
+    }
+
     componentWillReceiveProps(nextProps){
         this.setState({ videos: nextProps.auth.videoList });
     };
@@ -44,6 +61,21 @@ class AuthWrapper extends Component {
     render () {
         return (
             <View>
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => this.openVideo(!this.state.modalVisible)}>
+                    <View style={{ height: 300 }}>
+                        <WebView
+                            style={ styles.WebViewContainer }
+                            javaScriptEnabled={true}
+                            domStorageEnabled={true}
+                            source={{uri: `https://www.youtube.com/embed/${this.state.videoId}` }}
+                        />
+                    </View>
+                </Modal>
+
                 <TextInput
                     style={{height: 40, borderColor: 'grey', borderWidth: 2, margin: 10, padding: 10, borderRadius:20}}
                     onChangeText={(searchText) => this.search(searchText)}
@@ -60,14 +92,16 @@ class AuthWrapper extends Component {
                                 ({item}) => {
                                     const image = item.snippet.thumbnails.default
                                     return (
-                                        <View style={styles.item}>
-                                            <Image
-                                                style={{width: image.width, height: image.height}}
-                                                source={{uri: image.url}}
-                                            />
-                                            <Text>{item.snippet.title}</Text>
-                                            <Text style={{color: 'blue'}}>Author: {item.snippet.channelTitle}</Text>
-                                        </View>
+                                        <TouchableOpacity onPress={() => this.openVideo(!this.state.modalVisible, item.id)}>
+                                            <View style={styles.item}>
+                                                <Image
+                                                    style={{width: image.width, height: image.height}}
+                                                    source={{uri: image.url}}
+                                                />
+                                                <Text>{item.snippet.title}</Text>
+                                                <Text style={{color: 'blue'}}>Author: {item.snippet.channelTitle}</Text>
+                                            </View>
+                                        </TouchableOpacity>
                                     )
                                 }
 

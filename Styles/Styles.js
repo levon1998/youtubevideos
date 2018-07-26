@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, Platform} from "react-native";
 
 const styles = StyleSheet.create({
     container: {
@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: 10,
+    },
+    WebViewContainer: {
+        marginTop: (Platform.OS == 'ios') ? 20 : 0,
     }
 });
 
